@@ -57,42 +57,34 @@ The Generative AI Fundamentals course provides comprehensive training in modern 
 
 ## Requirements and Dependencies
 
-This repository includes three requirements files to help you set up the necessary dependencies:
+This repository includes three requirements files, one per group of modules. Install only the file for the modules you are working on, using Python 3.12.
 
-### Core Dependencies
-- **`requirements.txt`** - Contains all the core Python packages needed for the course, including Jupyter, OpenAI, transformers, and other essential libraries.
+### Available Files
 
-### PyTorch Dependencies
-Choose the appropriate PyTorch installation based on your hardware:
-
-- **`requirements-torch-cpu.txt`** - PyTorch installation for CPU-only systems
-  - Use this if you don't have a CUDA-compatible GPU
-  - Includes CPU-optimized versions of torch, torchaudio, and torchvision
-
-- **`requirements-torch-gpu.txt`** - PyTorch installation for GPU systems
-  - Use this if you have a CUDA-compatible GPU for faster training
-  - Includes GPU-accelerated versions of torch, torchaudio, and torchvision
+- **`requirements3-5.txt`** - Modules 3 and 5: applications of generative AI and building applications using foundation models.
+- **`requirements8-10-12.txt`** - Modules 8, 10, and 12: evaluations, PyTorch, and text generation. This is `venv1` in the Vocareum workspace.
+- **`requirements16-18-project.txt`** - Modules 16 and 18 plus the course project: adds `torch`, `vllm`, `unsloth`, and `triton` for PEFT and GRPO fine-tuning. Requires a CUDA GPU. This is `venv2` in the Vocareum workspace.
 
 ### Installation Instructions
 
-1. **Install core dependencies:**
+1. **Modules 3 and 5:**
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements3-5.txt
    ```
 
-2. **Install PyTorch (choose one):**
-   
-   For CPU-only systems:
+2. **Modules 8, 10, and 12:**
    ```bash
-   pip install -r requirements-torch-cpu.txt
-   ```
-   
-   For GPU systems:
-   ```bash
-   pip install -r requirements-torch-gpu.txt
+   pip install -r requirements8-10-12.txt
    ```
 
-3. **Verify your installation:**
+3. **Modules 16, 18, and the project (GPU):**
+   ```bash
+   pip install -r requirements16-18-project.txt --no-deps
+   ```
+
+   **`--no-deps` is required here:** this file deliberately pins `triton==3.2.0`, below the `triton==3.3.1` that `torch==2.7.1` asks for, because Triton 3.3.x cannot compile vLLM's LoRA kernels on Turing GPUs (Tesla T4, compute capability 7.5) - without `--no-deps` the resolver upgrades Triton and the project notebook fails on model load with `RuntimeError: PassManager::run failed`.
+
+4. **Verify your installation:**
    ```python
    import torch
    print(f"PyTorch version: {torch.__version__}")
